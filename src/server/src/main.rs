@@ -1,4 +1,4 @@
-use rocket::fs::{relative, FileServer};
+use rocket::fs::FileServer;
 use rocket::response::Redirect;
 use std::env::current_dir;
 
