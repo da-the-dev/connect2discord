@@ -1,26 +1,23 @@
 <script lang="ts">
 import { onMount } from 'svelte'
-
 import User from './models/User'
+import { getDiscordCode } from './modules/discordRequests'
+
 let user = {} as User
+let code = ''
 
 onMount(async () => {
-	// Make a call to backend to retrieve user
-	// Right now it's a mock
-	user = {
-		id: 1,
-		username: 'sv-cheats-1',
-		creationTimestamp: 1,
-	}
+	code = getDiscordCode()
 })
 </script>
 
 <main>
-	<h1>Welcome: {user.username}</h1>
-
-	{#if !localStorage.getItem('discordcode')}
+	{#if code}
+		<h1>Welcome: {user.username}</h1>
+		<p>{code}</p>
+	{:else}
 		<a
-			href="https://discord.com/api/oauth2/authorize?client_id=997526709148598282&redirect_uri=localhost%3A8000&response_type=code&scope=identify"
+			href="https://discord.com/api/oauth2/authorize?client_id=997526709148598282&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2F&response_type=code&scope=identify"
 		>
 			<h2>Login</h2>
 		</a>

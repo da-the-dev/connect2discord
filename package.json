@@ -7,7 +7,7 @@
     "deploycmd": "npm run build && node dist/deployCommands.js",
     "start": "npm run build && npm run deploycmd && node dist/index.js",
     "dev": "tsc -w -p tsconfig.bot.json & tsc -w -p tsconfig.server.json & rollup -c -w & nodemon -d 1 dist/server/index.js",
-    "build": "tsc -p tsconfig.bot.json & tsc -p tsconfig.server.json & rollup -c"
+    "build": "tsc -p tsconfig.bot.json & cargo build --manifest-path src/server/Cargo.toml & rollup -c"
   },
   "keywords": [],
   "author": "da_dev",
@@ -17,7 +17,8 @@
     "discord.js": "^13.8.1",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
-    "sirv-cli": "^2.0.2"
+    "sirv-cli": "^2.0.2",
+    "undici": "^5.7.0"
   },
   "devDependencies": {
     "@discordjs/builders": "^0.15.0",

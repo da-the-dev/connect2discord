@@ -39,7 +39,7 @@ export default {
 		}),
 
 
-		!production && serve({ port: 8000, contentBase: 'public' }),
+		//!production && serve({ port: 8000, contentBase: 'public' }),
 		!production && livereload('public'),
 
 		production && terser()
