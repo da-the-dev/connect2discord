@@ -1,22 +1,20 @@
-use rocket::fs::FileServer;
-use rocket::response::Redirect;
-use std::env::current_dir;
+use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder, http::header, body};
+use actix_files as fs;
+use fs::NamedFile;
+use actix_web::Result;
 
-#[macro_use]
-extern crate rocket;
-
-#[get("/login")]
-fn pseudo_login() -> Redirect {
-    Redirect::to("/")
+async fn index() -> Result<NamedFile> {
+    Ok(fs::NamedFile::open("./public/index.html")?)
 }
 
-#[launch]
-fn rocket() -> _ {
-    let mut cwd = current_dir().unwrap();
-    cwd.pop();
-    cwd.pop();
-
-    rocket::build()
-        .mount("/", routes![pseudo_login])
-        .mount("/", FileServer::from(format!("{}/public", cwd.display())))
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
+    HttpServer::new(|| {
+        App::new()
+            .route("/", web::get().to(index))
+            .service(fs::Files::new("/", "./public").show_files_listing())
+    })
+    .bind(("127.0.0.1", 8000))?
+    .run()
+    .await
 }
