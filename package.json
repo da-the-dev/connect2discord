@@ -4,6 +4,8 @@
   "description": "",
   "type": "module",
   "scripts": {
+    "postinstall": "cargo install cargo-watch",
+    "dev": "cargo watch -C src/server/src -x run & vite build --watch",
     "build": "cargo b --manifest-path=src/server/Cargo.toml & vite build",
     "start": "npm run build && ./src/server/target/debug/server"
   },
