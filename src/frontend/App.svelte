@@ -1,62 +1,60 @@
 <script lang="ts">
-import { onMount } from 'svelte'
-import User from './models/User'
-import { getDiscordCode } from './modules/discordRequests'
-
-let user = {} as User
-let code = ''
-
-onMount(async () => {
-	code = getDiscordCode()
-})
 </script>
 
 <main>
-	{#if code}
-		<h1>Welcome: {user.username}</h1>
-		<p>{code}</p>
-	{:else}
-		<a
-			href="https://discord.com/api/oauth2/authorize?client_id=997526709148598282&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2F&response_type=code&scope=identify"
-		>
-			<h2>Login</h2>
-		</a>
-	{/if}
+	<h1>Hello Typescript!</h1>
+
+	<p>
+		Visit <a href="https://svelte.dev">svelte.dev</a> to learn how to build Svelte
+		apps.
+	</p>
+
+	<p>
+		Check out <a href="https://github.com/sveltejs/kit#readme">SvelteKit</a>
+		for the officially supported framework, also powered by Vite!
+	</p>
 </main>
 
-<footer>
-	<p>
-		This is a demo project licenced under MIT licence. Feel free to use it
-		in any shape or form
-	</p>
-	<p>Copyright OLOLOLOLO 2022</p>
-</footer>
-
 <style>
+:root {
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+		Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
 main {
-	padding: 1rem;
 	text-align: center;
-
-	min-height: 100%;
+	padding: 1em;
+	margin: 0 auto;
 }
+
+img {
+	height: 16rem;
+	width: 16rem;
+}
+
 h1 {
-	font-size: xxx-large;
+	color: #ff3e00;
+	text-transform: uppercase;
+	font-size: 4rem;
+	font-weight: 100;
+	line-height: 1.1;
+	margin: 2rem auto;
+	max-width: 14rem;
 }
 
-:global(html),
-:global(body) {
-	padding: 0;
+p {
+	max-width: 14rem;
+	margin: 1rem auto;
+	line-height: 1.35;
 }
 
-footer {
-	padding: 1rem;
-	text-align: center;
-	height: 10%;
-	background: #eee;
+@media (min-width: 480px) {
+	h1 {
+		max-width: none;
+	}
 
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-direction: column;
+	p {
+		max-width: none;
+	}
 }
 </style>
