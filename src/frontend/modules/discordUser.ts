@@ -3,7 +3,7 @@ import {
 	AccessCode,
 	AccessCodeResponse,
 	isAccessCode,
-} from '../intefaces/accessCodeResponce'
+} from '../interfaces/accessCodeResponce'
 
 interface DiscordUser {
 	id: string
