@@ -10,7 +10,7 @@ This project is a webapp that controls settings of a Discord bot remotely. Bot s
 - **Backend:** Rust on actix-web and mongodb for DB.
 - **BAot:** discord.js with TypeScript.
 
-#### How to use
+### How to use
 This project relies on some private keys. The keys in question are:
 - Discord app's client secret
 - Discord app's bot's token

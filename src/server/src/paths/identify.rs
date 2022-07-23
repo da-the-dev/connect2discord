@@ -1,4 +1,4 @@
-use actix_web::{get, web, HttpResponse, Result, Responder};
+use actix_web::{get, web, HttpResponse, Result};
 use serde::{Deserialize, Serialize};
 use std::{error::Error, env};
 use serde_urlencoded::to_string;
