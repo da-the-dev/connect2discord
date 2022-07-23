@@ -2,30 +2,28 @@
 import { onMount } from 'svelte'
 import User from './modules/discordUser'
 
-$: user = new User()
-let loggedIn: boolean
-let username = ''
+let user = new User()
 
 onMount(async () => {
 	await user.login()
-	loggedIn = user.loggedIn
-
-	if (!loggedIn) return
 	await user.getDiscordUser()
-	username = user.discordUser.username
 })
 </script>
 
 <main>
-	{#if loggedIn}
-		<h1>Welcome {username}</h1>
-	{:else}
-		<a
-			href="https://discord.com/api/oauth2/authorize?client_id=997526709148598282&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2F&response_type=code&scope=identify"
-		>
-			<h2>Login</h2>
-		</a>
-	{/if}
+	{#await user.login() then _}
+		{#if user.loggedIn}
+			{#await user.getDiscordUser() then _}
+				<h1>Welcome {user.discordUser.username}</h1>
+			{/await}
+		{:else}
+			<a
+				href="https://discord.com/api/oauth2/authorize?client_id=997526709148598282&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2F&response_type=code&scope=identify"
+			>
+				<h2>Login</h2>
+			</a>
+		{/if}
+	{/await}
 </main>
 
 <footer>
@@ -41,7 +39,7 @@ main {
 	padding: 1rem;
 	text-align: center;
 
-	min-height: 100%;
+	min-height: 100vh;
 }
 h1 {
 	font-size: xxx-large;

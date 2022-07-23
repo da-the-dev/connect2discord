@@ -10,13 +10,13 @@ interface DiscordUser {
 	username: string
 	discriminator: string
 	avatar: string
-	verified: boolean | undefined
-	email: string | undefined
-	flags: number | undefined
-	banner: number | undefined
-	accent_color: number | undefined
-	premium_type: number | undefined
-	public_flags: number | undefined
+	verified?: boolean
+	email?: string
+	flags?: number
+	banner?: number
+	accent_color?: number
+	premium_type?: number
+	public_flags?: number
 }
 
 export default class User {
@@ -29,13 +29,12 @@ export default class User {
 	constructor() {}
 
 	public async login() {
-		// Try to find access code cookie
-		const accessCodeCookie = JSON.parse(
-			decodeURI(Coookie.get('access_code'))
-		) as AccessCode
+		// Try to find access code cookie. If it exists, just load it
+		if (Coookie.get('access_code')) {
+			const accessCodeCookie = JSON.parse(
+				decodeURI(Coookie.get('access_code'))
+			) as AccessCode
 
-		if (accessCodeCookie) {
-			// If it exists, just load it
 			this.accessCode = accessCodeCookie
 			this.loggedIn = true
 		} else {
