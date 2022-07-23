@@ -40,7 +40,6 @@ pub async fn identify(info: web::Query<Code>) -> Result<HttpResponse, Box<dyn Er
         Ok(r) => {
             match r.text().await {
                 Ok(t) => {
-                    println!("{}", t);
                     Ok(HttpResponse::Ok().body(t))
                 },
                 Err(e) => Ok(HttpResponse::BadGateway().body(format!("Error in r.text: {}", e)))

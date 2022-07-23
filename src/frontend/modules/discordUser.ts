@@ -4,25 +4,14 @@ import {
 	AccessCodeResponse,
 	isAccessCode,
 } from '../interfaces/accessCodeResponce'
-
-interface DiscordUser {
-	id: string
-	username: string
-	discriminator: string
-	avatar: string
-	verified?: boolean
-	email?: string
-	flags?: number
-	banner?: number
-	accent_color?: number
-	premium_type?: number
-	public_flags?: number
-}
+import type DiscordUser from '../interfaces/discordUser'
+import type UserGuild from '../interfaces/userGuild'
 
 export default class User {
 	public loggedIn: boolean
 	public accessCode: AccessCode
 	public discordUser: DiscordUser
+	public guilds: [UserGuild]
 
 	public username: string
 
@@ -71,15 +60,30 @@ export default class User {
 		}
 	}
 
-	public async getDiscordUser() {
-		const res = await fetch('https://discord.com/api/users/@me', {
+	private async apiRequestSelf(endpoint: string) {
+		console.log(
+			`${this.accessCode.token_type} ${this.accessCode.access_token}`
+		)
+		return await fetch(`https://discord.com/api${endpoint}`, {
 			headers: [
 				[
-					'authorization',
+					'Authorization',
 					`${this.accessCode.token_type} ${this.accessCode.access_token}`,
 				],
 			],
 		})
+	}
+
+	public async getDiscordUser(): Promise<DiscordUser> {
+		const res = await this.apiRequestSelf('/users/@me')
 		this.discordUser = JSON.parse(await res.text())
+		return this.discordUser
+	}
+
+	public async getUserGuilds(): Promise<[UserGuild]> {
+		const res = await this.apiRequestSelf('/users/@me/guilds')
+		// console.log(await res.)
+		this.guilds = JSON.parse(await res.text())
+		return this.guilds
 	}
 }

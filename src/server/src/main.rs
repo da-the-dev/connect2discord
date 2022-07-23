@@ -10,6 +10,7 @@ async fn index() -> Result<NamedFile> {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     dotenv::dotenv().ok();
+    println!("Server starts on http://localhost:8000");
     HttpServer::new(|| {
         let cors = Cors::default()
             .allow_any_origin();
@@ -18,7 +19,7 @@ async fn main() -> std::io::Result<()> {
             .route("/", web::get().to(index))
             .service(identify)
             .service(Files::new("/", "../../../public").show_files_listing())
-    })
+        })
     .bind(("127.0.0.1", 8000))?
     .run()
     .await

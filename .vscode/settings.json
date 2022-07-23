@@ -7,5 +7,6 @@
         "<C-d>": false,
         "<C-s>": false,
         "<C-z>": false
-    }
+    },
+    "vim.smartRelativeLine": true
 }
