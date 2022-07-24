@@ -16,13 +16,13 @@ pub struct IdentifyRequest {
     redirect_uri: String
 }
 
-#[get("/identify")] 
+#[get("/identify")]
 pub async fn identify(info: web::Query<Code>) -> Result<HttpResponse, Box<dyn Error>> {
     // Create the request to get user access code
     let code = &info.code;
     let body = IdentifyRequest {
         client_id: String::from("997526709148598282"),
-        client_secret: String::from(env::var("CLIENT_SECRET")?),
+        client_secret: env::var("CLIENT_SECRET")?,
         grant_type: String::from("authorization_code"),
         code: code.to_string(),
         redirect_uri: String::from("http://localhost:8000/")

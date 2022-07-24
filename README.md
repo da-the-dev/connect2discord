@@ -7,8 +7,8 @@ This project is a webapp that controls settings of a Discord bot remotely. Bot s
 
 #### Tech stack:
 - **Frontend:** Svelte on Vite with Typescript.
-- **Backend:** Rust on actix-web and mongodb for DB.
-- **BAot:** discord.js with TypeScript.
+- **Backend:** Rust on actix-web and ~~mongodb~~ for DB.
+- **Bot:** discord.js with TypeScript.
 
 ### How to use
 This project relies on some private keys. The keys in question are:
@@ -34,3 +34,4 @@ To stop, press `Ctrl+C` in the terminal.
 
 #### TODO:
 - [ ] Add info about login link in the README.md
+- [ ] Define what the project is supposed to do functionality-wise
