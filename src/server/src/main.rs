@@ -1,7 +1,9 @@
 use actix_web::{web, App, Result, HttpServer};
 use actix_files::{Files, NamedFile};
 use actix_cors::Cors;
-mod paths; use paths::identify::identify as identify;
+mod paths;
+use paths::identify::identify as identify;
+use paths::guilds::guilds as guilds;
 
 async fn index() -> Result<NamedFile> {
     Ok(NamedFile::open("../../../public/index.html")?)
@@ -18,6 +20,7 @@ async fn main() -> std::io::Result<()> {
             .wrap(cors)
             .route("/", web::get().to(index))
             .service(identify)
+            .service(guilds)
             .service(Files::new("/", "../../../public").show_files_listing())
         })
     .bind(("127.0.0.1", 8000))?

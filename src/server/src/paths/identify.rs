@@ -27,7 +27,6 @@ pub async fn identify(info: web::Query<Code>) -> Result<HttpResponse, Box<dyn Er
         code: code.to_string(),
         redirect_uri: String::from("http://localhost:8000/")
     };
-
     // Complete the request
     let client = reqwest::Client::new();
     let resp = client

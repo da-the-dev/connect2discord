@@ -2,5 +2,9 @@
     "semi": false,
     "singleQuote": true,
     "arrowParens": "avoid",
-    "printWidth": 120
+    "printWidth": 120,
+    "tabWidth": 4,
+    "svelteStrictMode": false,
+    "svelteBracketNewLine": true,
+    "svelteIndentScriptAndStyle": false
 }
