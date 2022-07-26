@@ -3,4 +3,4 @@
 /public/*
 /dist
 **/target
-/.obsidian
+**/.obsidian

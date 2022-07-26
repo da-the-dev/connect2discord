@@ -1,2 +1,2 @@
 pub mod identify;
-pub mod guilds;
+pub mod discord_api;
