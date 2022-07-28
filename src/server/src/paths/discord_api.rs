@@ -1,9 +1,8 @@
 use actix_web::{get, HttpResponse, web::Path, HttpResponseBuilder};
 use reqwest::{Client, StatusCode, Response};
 use serde::Deserialize;
-use std::{env, time::Duration, error::Error};
+use std::{env, time::Duration};
 use tokio::time;
-use std::future::Future;
 
 #[derive(Deserialize)]
 struct DiscordRateLimitError {
@@ -23,6 +22,7 @@ pub async fn discord_api(path: Path<String>) -> HttpResponse {
         .await.unwrap();
 
     async fn regen_request(bad_response: Response, endpoint: &str) -> Response {
+        println!("Regenerating request because got rate limited...");
         let error: DiscordRateLimitError = serde_json::from_str(&bad_response.text().await.unwrap()).unwrap();
         time::sleep(Duration::from_secs_f32(error.retry_after)).await;
 

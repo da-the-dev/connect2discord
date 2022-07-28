@@ -33,17 +33,8 @@ pub async fn identify(info: web::Query<Code>) -> Result<HttpResponse, Box<dyn Er
         .post("https://discord.com/api/v10/oauth2/token")
         .header("Content-Type", "application/x-www-form-urlencoded")
         .body(to_string(body)?)
-        .send();
+        .send()
+        .await?;
 
-    match resp.await {
-        Ok(r) => {
-            match r.text().await {
-                Ok(t) => {
-                    Ok(HttpResponse::Ok().body(t))
-                },
-                Err(e) => Ok(HttpResponse::BadGateway().body(format!("Error in r.text: {}", e)))
-            }
-        },
-        Err(e) => Ok(HttpResponse::BadGateway().body(format!("Error in responce: {}", e)))
-    }
+    Ok(HttpResponse::Ok().body(resp.text().await?))
 }
