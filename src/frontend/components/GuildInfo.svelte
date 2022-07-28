@@ -1,38 +1,25 @@
 <script lang="ts">
-import { onMount } from 'svelte'
-
+import type Guild from '../interfaces/guild'
 import type UserGuild from '../interfaces/userGuild'
-import Bot from '../modules/discordBot'
 
 export let activeGuild: UserGuild
-
-let bot = new Bot()
-let botIsInGuild: boolean
-onMount(async () => {
-    await bot.getGuilds()
-    botIsInGuild = bot.guilds.find(bg => bg.id == activeGuild.id) != undefined
-})
+export let botGuilds: [Guild]
+const isBotInGuild = () => botGuilds.find(g => g.id == activeGuild.id)
 </script>
 
 <section>
-    {#await bot.getGuilds() then _}
-        {#if activeGuild}
-            {#if botIsInGuild}
-                <ul>
-                    <li>{activeGuild.id}</li>
-                </ul>
-            {:else}
-                <h1>Bot is not in this guild</h1>
-                <h1>
-                    <a
-                        href="https://discord.com/api/oauth2/authorize?client_id=997526709148598282&permissions=8&scope=bot%20applications.commands"
-                    >
-                        Add it
-                    </a>
-                </h1>
-            {/if}
+    {#if activeGuild}
+        {#if isBotInGuild}
+            <h1>{activeGuild.id}</h1>
         {:else}
-            <h1>Select a guild of the left first</h1>
+            <h1>
+                The bot is not a member of this Server.
+                <a href="https://discord.com/api/oauth2/authorize?client_id=997526709148598282&permissions=8&scope=bot">
+                    Please add it via this link.
+                </a>
+            </h1>
         {/if}
-    {/await}
+    {:else}
+        <h1>Plese select a guild on the left first</h1>
+    {/if}
 </section>

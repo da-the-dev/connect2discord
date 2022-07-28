@@ -1,4 +1,3 @@
-import Coookie from 'js-cookie'
 import { AccessCode, AccessCodeResponse, isAccessCode } from '../interfaces/accessCodeResponce'
 import type DiscordUser from '../interfaces/discordUser'
 import type UserGuild from '../interfaces/userGuild'
@@ -7,16 +6,14 @@ export default class User {
     public loggedIn: boolean
     public accessCode: AccessCode
     public discordUser: DiscordUser
-    public guilds: [UserGuild]
+    public guilds: UserGuild[]
 
     public username: string
 
-    constructor() {}
-
     public async login() {
         // Try to find access code cookie. If it exists, just load it
-        if (Coookie.get('access_code')) {
-            const accessCodeCookie = JSON.parse(decodeURI(Coookie.get('access_code'))) as AccessCode
+        if (localStorage.getItem('access_code')) {
+            const accessCodeCookie = JSON.parse(localStorage.getItem('access_code')) as AccessCode
 
             this.accessCode = accessCodeCookie
             this.loggedIn = true
@@ -29,16 +26,13 @@ export default class User {
                 // If there is, remove it from query, get access code and save it to a cookie
                 window.history.replaceState({}, document.title, '/')
 
-                const res = JSON.parse(
-                    await (await fetch(`http://localhost:8000/identify?code=${authCode}`)).text()
-                ) as AccessCodeResponse
+                const response = await fetch(`http://localhost:8000/identify?code=${authCode}`)
+                const json = JSON.parse(await response.text()) as AccessCodeResponse
 
-                if (!isAccessCode(res)) throw new SyntaxError('No access code recieved!')
+                if (!isAccessCode(json)) throw new SyntaxError('No access code recieved!')
 
-                this.accessCode = res
-                Coookie.set('access_code', encodeURI(JSON.stringify(res)), {
-                    expires: 7,
-                })
+                this.accessCode = json
+                localStorage.setItem('access_code', JSON.stringify(json))
 
                 this.loggedIn = true
             } else {
@@ -46,22 +40,32 @@ export default class User {
                 this.loggedIn = false
             }
         }
+        await this.getGuilds()
     }
 
-    private async apiRequestSelf(endpoint: string) {
+    private async apiRequest(endpoint: string) {
+        console.log('Request sent:', endpoint)
         return await fetch(`https://discord.com/api${endpoint}`, {
             headers: [['Authorization', `${this.accessCode.token_type} ${this.accessCode.access_token}`]],
         })
     }
 
     public async getDiscordUser(): Promise<DiscordUser> {
-        const res = await this.apiRequestSelf('/users/@me')
+        const res = await this.apiRequest('/users/@me')
         this.discordUser = JSON.parse(await res.text())
         return this.discordUser
     }
 
-    public async getUserGuilds(): Promise<[UserGuild]> {
-        const res = await this.apiRequestSelf('/users/@me/guilds')
+    // public async getOwnerGuilds(): Promise<UserGuild[]> {
+    //     if (!this.guilds) await this.getGuilds()
+    //     return this.guilds.filter(g => g.owner)
+    // }
+    public getOwnerGuilds(): UserGuild[] {
+        return this.guilds.filter(g => g.owner)
+    }
+
+    private async getGuilds(): Promise<UserGuild[]> {
+        const res = await this.apiRequest('/users/@me/guilds')
         this.guilds = JSON.parse(await res.text())
         this.guilds.sort((a, b) => (a.name > b.name ? 1 : -1))
         return this.guilds

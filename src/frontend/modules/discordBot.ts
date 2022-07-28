@@ -5,11 +5,11 @@ export default class Bot {
     constructor() {}
 
     private async apiRequest(endpoint: string) {
-        return await fetch(`http://localhost:8000${endpoint}`)
+        return await fetch(`http://localhost:8000/botapi${endpoint}`)
     }
 
-    public async getGuilds(): Promise<[Guild]> {
-        const res = await this.apiRequest('/guilds')
+    public async getGuilds(): Promise<Guild[]> {
+        const res = await this.apiRequest('/user/@me/guilds')
         this.guilds = JSON.parse(await res.text())
         return this.guilds
     }

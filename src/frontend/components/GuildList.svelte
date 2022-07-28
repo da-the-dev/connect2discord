@@ -1,25 +1,12 @@
 <script lang="ts">
-  import { ListGroup } from 'sveltestrap'
-  import type UserGuild from '../interfaces/userGuild'
-  import GuildLink from './GuildLink.svelte'
-  export let guilds: [UserGuild]
-  export let activeGuild: UserGuild
+import { ListGroup, ListGroupItem } from 'sveltestrap'
+import type UserGuild from '../interfaces/userGuild'
+
+export let guilds: UserGuild[]
 </script>
 
-<div>
-  <ListGroup numbered>
-    {#each guilds as guild, i}
-      {#if guild.owner}
-        <div on:click={() => (activeGuild = guild)}>
-          <GuildLink {guild} />
-        </div>
-      {/if}
+<ListGroup>
+    {#each guilds as guild}
+        <ListGroupItem>{guild.name}</ListGroupItem>
     {/each}
-  </ListGroup>
-</div>
-
-<style>
-  div {
-    user-select: none;
-  }
-</style>
+</ListGroup>

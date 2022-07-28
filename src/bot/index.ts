@@ -8,22 +8,22 @@ const client = new Client({ intents: [Intents.FLAGS.GUILDS] })
 
 // When the client is ready, run this code (only once)
 client.once('ready', () => {
-	console.log('Ready!')
+    console.log('Ready!')
 })
 
 client.on('interactionCreate', async i => {
-	if (!i.isCommand()) return
+    if (!i.isCommand()) return
 
-	const { commandName } = i
+    const { commandName } = i
 
-	switch (commandName) {
-		case 'ping':
-			{
-				i.reply('Pong!')
-			}
-			break
-	}
+    switch (commandName) {
+        case 'ping':
+            i.reply('Pong!')
+            break
+    }
 })
+
+client.on('guildCreate', g => {})
 
 // Login to Discord with your client's token
 client.login(process.env.TOKEN)

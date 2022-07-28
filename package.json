@@ -13,14 +13,10 @@
   "author": "da_dev",
   "license": "MIT",
   "dependencies": {
-    "cors": "^2.8.5",
     "discord.js": "^13.8.1",
     "dotenv": "^16.0.1",
-    "express": "^4.18.1",
     "js-cookie": "^3.0.1",
-    "sirv-cli": "^2.0.2",
-    "sveltestrap": "^5.9.0",
-    "undici": "^5.7.0"
+    "sveltestrap": "^5.9.0"
   },
   "devDependencies": {
     "@discordjs/builders": "^0.15.0",
