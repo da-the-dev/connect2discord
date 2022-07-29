@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 use actix_web::{get, HttpResponse, web::Path, HttpResponseBuilder};
 use reqwest::{Client, StatusCode, Response};
 use serde::Deserialize;
