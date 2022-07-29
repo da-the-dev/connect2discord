@@ -37,4 +37,5 @@ Those `.md`'s with crazy maniacs' rambles are not as much as documentaion, but m
 
 #### TODO:
 - [ ] Add info about login link in the README.md
-- [ ] Define what the project is supposed to do functionality-wise
+- [x] Define what the project is supposed to do functionality-wise
+- [x] Look into the "nano" npm package and why it doesn't work in the browser
