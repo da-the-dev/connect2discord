@@ -3,14 +3,13 @@ import type Guild from '../interfaces/guild'
 import type UserGuild from '../interfaces/userGuild'
 
 export let activeGuild: UserGuild
-export let botGuilds: [Guild]
-const isBotInGuild = () => botGuilds.find(g => g.id == activeGuild.id)
+export let botGuilds: Guild[]
 </script>
 
 <section>
     {#if activeGuild}
-        {#if isBotInGuild}
-            <h1>{activeGuild.id}</h1>
+        {#if botGuilds.findIndex(g => g.id == activeGuild.id) != -1}
+            <h1>"{activeGuild.name}" settings:</h1>
         {:else}
             <h1>
                 The bot is not a member of this Server.

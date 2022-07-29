@@ -9,7 +9,7 @@ export default class Bot {
     }
 
     public async getGuilds(): Promise<Guild[]> {
-        const res = await this.apiRequest('/user/@me/guilds')
+        const res = await this.apiRequest('/users/@me/guilds')
         this.guilds = JSON.parse(await res.text())
         return this.guilds
     }

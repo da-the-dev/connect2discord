@@ -1,12 +1,14 @@
-<script>
+<script lang="ts">
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'sveltestrap'
+import type User from '../modules/user'
+export let user: User
 </script>
 
 <div class="profile">
     <Dropdown>
         <DropdownToggle caret>Profile</DropdownToggle>
         <DropdownMenu end>
-            <DropdownItem header>noname</DropdownItem>
+            <DropdownItem header>{user.discordUser.username}</DropdownItem>
             <DropdownItem><Button color="danger">Logout</Button></DropdownItem>
         </DropdownMenu>
     </Dropdown>

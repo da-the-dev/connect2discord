@@ -3,10 +3,9 @@ import { Col, Container, Row, Styles } from 'sveltestrap'
 import GuildInfo from './components/GuildInfo.svelte'
 import GuildList from './components/GuildList.svelte'
 import Profile from './components/Profile.svelte'
-import type Guild from './interfaces/guild'
 import type UserGuild from './interfaces/userGuild'
-import Bot from './modules/discordBot'
-import User from './modules/discordUser'
+import Bot from './modules/bot'
+import User from './modules/user'
 
 const user = new User()
 const bot = new Bot()
@@ -18,15 +17,15 @@ let activeGuild: UserGuild
 {#await Promise.all([user.login(), bot.getGuilds()]) then _}
     <Container fluid>
         <Row>
-            <h1>Hi, noname#6969</h1>
+            <h1>Hi, {user.discordUser.username}</h1>
         </Row>
-        <Profile />
+        <Profile {user} />
         <Row>
             <Col xs="2">
-                <GuildList guilds={user.getOwnerGuilds()} />
+                <GuildList guilds={user.getOwnerGuilds()} bind:activeGuild />
             </Col>
             <Col>
-                <GuildInfo activeGuild={user.getOwnerGuilds()[0]} botGuilds={bot.guilds} />
+                <GuildInfo bind:activeGuild botGuilds={bot.guilds} />
             </Col>
         </Row>
     </Container>

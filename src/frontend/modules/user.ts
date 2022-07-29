@@ -40,11 +40,11 @@ export default class User {
                 this.loggedIn = false
             }
         }
+        await this.getDiscordUser()
         await this.getGuilds()
     }
 
     private async apiRequest(endpoint: string) {
-        console.log('Request sent:', endpoint)
         return await fetch(`https://discord.com/api${endpoint}`, {
             headers: [['Authorization', `${this.accessCode.token_type} ${this.accessCode.access_token}`]],
         })
@@ -56,10 +56,6 @@ export default class User {
         return this.discordUser
     }
 
-    // public async getOwnerGuilds(): Promise<UserGuild[]> {
-    //     if (!this.guilds) await this.getGuilds()
-    //     return this.guilds.filter(g => g.owner)
-    // }
     public getOwnerGuilds(): UserGuild[] {
         return this.guilds.filter(g => g.owner)
     }
