@@ -34,7 +34,6 @@ pub async fn db_get_settings(path: Path<String>) -> Result<HttpResponse, Box<dyn
 
     let response: CouchResult<GuildEntry> = db.get(&id).await;
     if let Ok(db_document) = response {
-
         let mut response = HttpResponse::Ok();
         response.append_header(("Content-Type", "application/json"));
         Ok(response.body(serde_json::to_string(&db_document.settings)?))

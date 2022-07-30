@@ -1,31 +1,39 @@
 <script lang="ts">
-import { Col, Container, Row, Styles } from 'sveltestrap'
-import GuildInfo from './components/GuildInfo.svelte'
-import GuildList from './components/GuildList.svelte'
+import { Col, Container, ListGroup, ListGroupItem, Row, Styles } from 'sveltestrap'
 import Profile from './components/Profile.svelte'
-import type UserGuild from './interfaces/userGuild'
 import Bot from './modules/bot'
+import DB from './modules/database'
 import User from './modules/user'
+import { activeGuild, activeGuildSettings } from './stores/activeGuild'
 
 const user = new User()
 const bot = new Bot()
-let activeGuild: UserGuild
+const db = new DB()
+
+async function selectGuild(i: number) {
+    $activeGuild = user.guilds[i]
+    if (bot.guilds.find(g => g.id == $activeGuild.id)) {
+        $activeGuildSettings = await db.getSettings($activeGuild.id)
+    }
+}
 </script>
 
 <Styles />
 
 {#await Promise.all([user.login(), bot.getGuilds()]) then _}
     <Container fluid>
-        <Row>
-            <h1>Hi, {user.discordUser.username}</h1>
-        </Row>
+        <Row><h1>Hi, {user.discordUser.username}</h1></Row>
         <Profile {user} />
         <Row>
-            <Col xs="2">
-                <GuildList guilds={user.getOwnerGuilds()} bind:activeGuild />
+            <Col xs="3">
+                <ListGroup>
+                    {#each user.guilds as guild, i}
+                        <ListGroupItem on:click={() => selectGuild(i)}>{guild.name} {guild.id}</ListGroupItem>
+                    {/each}
+                </ListGroup>
             </Col>
             <Col>
-                <GuildInfo bind:activeGuild botGuilds={bot.guilds} />
+                {$activeGuildSettings.embedColor}
             </Col>
         </Row>
     </Container>

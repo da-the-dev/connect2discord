@@ -56,13 +56,12 @@ export default class User {
         return this.discordUser
     }
 
-    public getOwnerGuilds(): UserGuild[] {
-        return this.guilds.filter(g => g.owner)
-    }
+    public ownerGuilds = (): UserGuild[] => this.guilds.filter(g => g.owner == true)
 
     private async getGuilds(): Promise<UserGuild[]> {
         const res = await this.apiRequest('/users/@me/guilds')
         this.guilds = JSON.parse(await res.text())
+        this.guilds = this.guilds.filter(g => g.owner)
         this.guilds.sort((a, b) => (a.name > b.name ? 1 : -1))
         return this.guilds
     }
