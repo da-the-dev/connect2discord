@@ -27,17 +27,3 @@ We can implement a generic GET route like `localhost:8000/botapi/{endpoint}` on 
 
 ### A few more tons of problems
 But there's more to these requests. There exists an issue of [rate limiting](https://discord.com/developers/docs/topics/rate-limits). TL;DR - Discord limits the amount of requests one IP can send. If the limit is exsided, there is time limit that must pass before another request can be processed. The backend should account for that and the fontend should show the user a loading message as well. On the backend we can make a request and if it failes with a rate limit, we can tell this happend by `429` status code. Inside the body there'll be `retry_after` value, which is an amount of seconds we must wait until we can send a new request. We can resend the request as soon as the timer is over.
-
-## Databasing
-Whenever the Discord bot join a guild, a new entry to the database should be added. This entry should contain the default settings. For example, let's say we need to control the color of embeds' border. Let's also say that the default color is `#cc00cc`. The default couch db entry would be:
-```json
-{
-	"guildId": "12654346532",
-	"settings": {
-		"embedColor": "#cc00cc"
-	}
-}
-```
-We cannot directly access the database via the client, since we need to authorize. So like with bot-related requests we'll have route these request via the backend. For the client we'll only need to implement `GET` and `PATCH` requests specifically for reading settings data and applying changes to it.
-
-Client is not the only one who'll need to access the database. Because it will also be hosted on the same machine as the backend code, we can directly connect to the database. We will need to create an entry each time a bot is added to a new, never-before-visited guild, read settings specific to a particular server and maybe even delete very old entries.  

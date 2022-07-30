@@ -38,4 +38,7 @@ Those `.md`'s with crazy maniacs' rambles are not as much as documentaion, but m
 #### TODO:
 - [ ] Add info about login link in the README.md
 - [x] Define what the project is supposed to do functionality-wise
-- [x] Look into the "nano" npm package and why it doesn't work in the browser
+- [x] Look into the "nano" npm package and why it doesn't work in the browser.
+		*It just isn't built to support usage in browsers*
+- [x] Figure out how to omit fields in Rust's structs
+        *You cannot*
