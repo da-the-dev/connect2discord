@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "postinstall": "cargo install cargo-watch && pip install pre-commit && pre-commit install",
-    "dev": "cargo watch -C src/server/src -x run & vite build --watch",
+    "dev": "concurrently --kill-others \"cargo watch -C src/server/src -x run \" \"vite build --watch\"",
     "build": "cargo b --manifest-path=src/server/Cargo.toml & vite build",
     "start": "npm run build && ./src/server/target/debug/server"
   },
@@ -32,6 +32,7 @@
     "@types/node": "^18.6.2",
     "@typescript-eslint/eslint-plugin": "^5.30.7",
     "@typescript-eslint/parser": "^5.30.7",
+    "concurrently": "^7.3.0",
     "discord-api-types": "^0.36.1",
     "eslint": "^8.20.0",
     "eslint-config-airbnb-base": "^15.0.0",

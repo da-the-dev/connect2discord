@@ -17,6 +17,9 @@ export default class User {
 
             this.accessCode = accessCodeCookie
             this.loggedIn = true
+
+            await this.getDiscordUser()
+            await this.getGuilds()
         } else {
             // If it doesn't exit, try to find the auth code in the URL query params
             const params = new URLSearchParams(window.location.search)
@@ -35,13 +38,14 @@ export default class User {
                 localStorage.setItem('access_code', JSON.stringify(json))
 
                 this.loggedIn = true
+
+                await this.getDiscordUser()
+                await this.getGuilds()
             } else {
                 // If there is no auth code, the client couldn't login
                 this.loggedIn = false
             }
         }
-        await this.getDiscordUser()
-        await this.getGuilds()
     }
 
     private async apiRequest(endpoint: string) {
