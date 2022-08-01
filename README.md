@@ -1,9 +1,9 @@
 # connect2discord
-An example webapp built on Rust, Svelte and discord.js with TypeScript
+An example web app built on Rust, Svelte and discord.js with TypeScript
 <br>
 # Project overview
 #### Description:
-This project is a webapp that controls settings of a Discord bot remotely. Bot should also have some functionality.
+This project is a web app that controls settings of a Discord bot remotely. Bot should also have some functionality.
 
 #### Tech stack:
 - **Frontend:** Svelte on Vite with Typescript.
@@ -33,12 +33,12 @@ Once that's done, do this:
 To stop, press `Ctrl+C` in the terminal.
 
 ### Why do `/docs` suck so much?
-Those `.md`'s with crazy maniacs' rambles are not as much as documentaion, but more so the real life [Rubber duck debugging](https://en.wikipedia.org/wiki/Rubber_duck_debugging). I use these files to describe the problem I'm having at the moment, which helps me to come up with a solution. I write things down so I don't forget anything. Plus I want to practice touch typing. 
+Those `.md`'s with crazy maniacs' rambles are not as much as documentation, but more so the real life [Rubber duck debugging](https://en.wikipedia.org/wiki/Rubber_duck_debugging). I use these files to describe the problem I'm having at the moment, which helps me to come up with a solution. I write things down, so I don't forget anything. Plus, I want to practice touch typing. 
 
 #### TODO:
 - [ ] Add info about login link in the README.md
 - [x] Define what the project is supposed to do functionality-wise
 - [x] Look into the "nano" npm package and why it doesn't work in the browser.
-		*It just isn't built to support usage in browsers*
+		*It just isn't built to support usage in browsers.*
 - [x] Figure out how to omit fields in Rust's structs
-        *You cannot*
+        *You cannot.*
