@@ -36,12 +36,12 @@ pub async fn discord_api(path: Path<String>) -> HttpResponse {
     }
 
     async fn send_response(response: Response) -> HttpResponse { 
-        let mut actix_response = HttpResponseBuilder::new(*&response.status());
+        let mut actix_response = HttpResponseBuilder::new(response.status());
         for header in response.headers().iter() {
             actix_response.append_header(header);
         }
         
-        actix_response.body(response.text().await.unwrap().to_string())
+        actix_response.body(response.text().await.unwrap())
     }
 
     if response.status() == StatusCode::TOO_MANY_REQUESTS {

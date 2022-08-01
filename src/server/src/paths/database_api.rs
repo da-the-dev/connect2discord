@@ -3,7 +3,7 @@ use serde_json::to_string;
 use std::{env, error::Error};
 use eyre::Result;
 use serde::{Deserialize, Serialize};
-use couch_rs::{types::{document::DocumentId, find::FindQuery}, CouchDocument, document::TypedCouchDocument, Client};
+use couch_rs::{types::document::DocumentId, CouchDocument, document::TypedCouchDocument, Client};
 
 const DB_HOST: &str = "http://localhost:5984";
 const DB_NAME: &str = "connect2discord";
