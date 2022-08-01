@@ -18,15 +18,16 @@ const settingsFetcher = async () => {
 }
 let settingsFetch = DB.getSettings('')
 
+async function saveSettings() {
+    await DB.saveSettings(oldSettings)
+    settingsFetch = settingsFetcher()
+}
+const saveSettingsDebounced = _.debounce(saveSettings, 700)
 async function selectGuild(i: number) {
     $activeGuild = user.guilds[i]
     settingsFetch = settingsFetcher()
 }
 
-async function saveSettings() {
-    await DB.saveSettings(oldSettings)
-    settingsFetch = settingsFetcher()
-}
 </script>
 
 <Styles />
@@ -50,7 +51,7 @@ async function saveSettings() {
                             <FormGroup floating label="Embed color">
                                 <Input
                                     bind:value={oldSettings.embedColor}
-                                    on:keydown={async () => await saveSettings()}
+                                    on:keypress={saveSettingsDebounced}
                                 />
                             </FormGroup>
                         {/if}
@@ -71,43 +72,6 @@ async function saveSettings() {
     <h1>An error occured during login</h1>
 {/await}
 
-<!-- {#await Promise.all([user.login(), Bot.getGuilds()]) then _} -->
-<!--     {#if user.loggedIn} -->
-<!--         <Container> -->
-<!--             <Row><h1>Hi, {user.discordUser.username}</h1></Row> -->
-<!--             <Profile /> -->
-<!--             <Row> -->
-<!--                 <Col xs="3"> -->
-<!--                     <ListGroup> -->
-<!--                         {#each user.guilds as guild, i} -->
-<!--                             <ListGroupItem on:click={() => selectGuild(i)}>{guild.name}</ListGroupItem> -->
-<!--                         {/each} -->
-<!--                     </ListGroup> -->
-<!--                 </Col> -->
-<!--                 <Col> -->
-<!--                     <h2>Settings</h2> -->
-<!--                     <FormGroup floating label="Embed color"> -->
-<!--                         {#if $activeHyperGuild} -->
-<!--                             <Input -->
-<!--                                 bind:value={$activeHyperGuild.settings.embedColor} -->
-<!--                                 on:keydown={async () => await saveChangesDebounced()} -->
-<!--                             /> -->
-<!--                         {/if} -->
-<!--                     </FormGroup> -->
-<!--                 </Col> -->
-<!--             </Row> -->
-<!--         </Container> -->
-<!--     {:else} -->
-<!--         <h1> -->
-<!--             <a -->
-<!--                 href="https://discord.com/api/oauth2/authorize?client_id=997526709148598282&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2F&response_type=code&scope=identify%20guilds" -->
-<!--             > -->
-<!--                 You are not logged in. Log in. -->
-<!--             </a> -->
-<!--         </h1> -->
-<!--     {/if} -->
-
-<!-- {/await} -->
 <style>
 h1 {
     text-align: center;
