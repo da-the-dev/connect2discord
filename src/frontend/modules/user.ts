@@ -3,14 +3,14 @@ import type DiscordUser from '../interfaces/discordUser'
 import type UserGuild from '../interfaces/userGuild'
 
 export default class User {
-    public loggedIn: boolean
-    public accessCode: AccessCode
-    public discordUser: DiscordUser
-    public guilds: UserGuild[]
+    static loggedIn: boolean
+    static accessCode: AccessCode
+    static discordUser: DiscordUser
+    static guilds: UserGuild[]
 
-    public username: string
+    static username: string
 
-    public async login() {
+    static async login() {
         // Try to find access code cookie. If it exists, just load it
         if (localStorage.getItem('access_code')) {
             const accessCodeCookie = JSON.parse(localStorage.getItem('access_code')) as AccessCode
@@ -48,21 +48,21 @@ export default class User {
         }
     }
 
-    private async apiRequest(endpoint: string) {
+    static async apiRequest(endpoint: string) {
         return await fetch(`https://discord.com/api${endpoint}`, {
             headers: [['Authorization', `${this.accessCode.token_type} ${this.accessCode.access_token}`]],
         })
     }
 
-    public async getDiscordUser(): Promise<DiscordUser> {
+    static async getDiscordUser(): Promise<DiscordUser> {
         const res = await this.apiRequest('/users/@me')
         this.discordUser = JSON.parse(await res.text())
         return this.discordUser
     }
 
-    public ownerGuilds = (): UserGuild[] => this.guilds.filter(g => g.owner == true)
+    static ownerGuilds = (): UserGuild[] => this.guilds.filter(g => g.owner == true)
 
-    private async getGuilds(): Promise<UserGuild[]> {
+    static async getGuilds(): Promise<UserGuild[]> {
         const res = await this.apiRequest('/users/@me/guilds')
         this.guilds = JSON.parse(await res.text())
         this.guilds = this.guilds.filter(g => g.owner)
