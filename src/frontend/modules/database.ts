@@ -5,14 +5,7 @@ export interface Settings {
 }
 
 export default class DB {
-    private id: string
-    public settings: Settings
-
-    constructor(id: string) {
-        this.id = id
-    }
-
-    public async getSettings(): Promise<Settings | undefined> {
+    static async getSettings(id: string): Promise<Settings | undefined> {
         const response = await fetch(
             `http://localhost:5984/connect2discord/_find`,
             {
@@ -20,7 +13,7 @@ export default class DB {
                 headers: [["Content-Type", "application/json"]],
                 body: JSON.stringify({
                     selector: {
-                        _id: this.id
+                        _id: id || ""
                     }
                 })
             }
@@ -31,7 +24,8 @@ export default class DB {
         else return {} as Settings
     }
 
-    public async saveSettings(settings: Settings): Promise<Settings> {
+    static async saveSettings(settings: Settings): Promise<void> {
+        console.log("saving settings")
         const response = await fetch(
             `http://localhost:8000/db/saveSettings`,
             {
@@ -42,7 +36,5 @@ export default class DB {
         ) 
         if (!response.ok)
             throw new SyntaxError("Unsuccessful request")
-        else 
-            return JSON.parse(await response.text())
     }
 }

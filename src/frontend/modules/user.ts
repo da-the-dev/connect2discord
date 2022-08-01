@@ -3,23 +3,25 @@ import type DiscordUser from '../interfaces/discordUser'
 import type UserGuild from '../interfaces/userGuild'
 
 export default class User {
-    static loggedIn: boolean
-    static accessCode: AccessCode
-    static discordUser: DiscordUser
-    static guilds: UserGuild[]
+    private accessCode: AccessCode
 
-    static username: string
+    public loggedIn: boolean
+    public discordUser: DiscordUser
+    public guilds: UserGuild[]
 
-    static async login() {
+    public async login() {
+        if (this.loggedIn) return
         // Try to find access code cookie. If it exists, just load it
         if (localStorage.getItem('access_code')) {
             const accessCodeCookie = JSON.parse(localStorage.getItem('access_code')) as AccessCode
 
             this.accessCode = accessCodeCookie
-            this.loggedIn = true
 
-            await this.getDiscordUser()
-            await this.getGuilds()
+            this.loggedIn = true
+            console.log("fetching user...")
+            await this.fetchDiscordUser()
+            console.log("user fetched!")
+            await this.fetchGuilds()
         } else {
             // If it doesn't exit, try to find the auth code in the URL query params
             const params = new URLSearchParams(window.location.search)
@@ -38,9 +40,8 @@ export default class User {
                 localStorage.setItem('access_code', JSON.stringify(json))
 
                 this.loggedIn = true
-
-                await this.getDiscordUser()
-                await this.getGuilds()
+                await this.fetchDiscordUser()
+                await this.fetchGuilds()
             } else {
                 // If there is no auth code, the client couldn't login
                 this.loggedIn = false
@@ -48,21 +49,20 @@ export default class User {
         }
     }
 
-    static async apiRequest(endpoint: string) {
+    private async apiRequest(endpoint: string) {
         return await fetch(`https://discord.com/api${endpoint}`, {
             headers: [['Authorization', `${this.accessCode.token_type} ${this.accessCode.access_token}`]],
         })
     }
 
-    static async getDiscordUser(): Promise<DiscordUser> {
+    public async fetchDiscordUser(): Promise<DiscordUser> {
         const res = await this.apiRequest('/users/@me')
         this.discordUser = JSON.parse(await res.text())
         return this.discordUser
     }
 
-    static ownerGuilds = (): UserGuild[] => this.guilds.filter(g => g.owner == true)
 
-    static async getGuilds(): Promise<UserGuild[]> {
+    public async fetchGuilds(): Promise<UserGuild[]> {
         const res = await this.apiRequest('/users/@me/guilds')
         this.guilds = JSON.parse(await res.text())
         this.guilds = this.guilds.filter(g => g.owner)

@@ -25,6 +25,7 @@ pub async fn save_settings(raw_settings: web::Json<GuildSettings>) -> Result<Htt
     let client = Client::new(DB_HOST, DB_LOGIN, &env::var("CDB_PASS")?)?;
     let db = client.db(DB_NAME).await?;
 
+
     let mut settings: GuildSettings = raw_settings.into_inner();
     println!("{}", to_string(&settings)?);
     let result = db.save(&mut settings).await;

@@ -2,55 +2,59 @@
 import { Col, Container, FormGroup, Input, ListGroup, ListGroupItem, Row, Styles } from 'sveltestrap'
 import Profile from './components/Profile.svelte'
 import Bot from './modules/bot'
-import DB from './modules/database'
 import User from './modules/user'
-import { activeGuild, activeGuildSettings } from './stores/activeGuild'
-import _ from "lodash"
+import { activeGuild } from './stores/activeGuild'
+import _ from 'lodash'
+import DB from './modules/database'
+import type { Settings } from './modules/database'
 
-let db: DB 
+const user = new User()
+const userLoginPromise = user.login()
+
+let oldSettings = {} as Settings
+const settingsFetcher = async () => {
+    oldSettings = await DB.getSettings($activeGuild.id)
+    return oldSettings
+}
+let settingsFetch = DB.getSettings('')
 
 async function selectGuild(i: number) {
-    $activeGuild = User.guilds[i]
-    db = new DB($activeGuild.id)
-
-    if (Bot.guilds.find(g => g.id == $activeGuild.id)) $activeGuildSettings = await db.getSettings()
-    console.log($activeGuildSettings)
+    $activeGuild = user.guilds[i]
+    settingsFetch = settingsFetcher()
 }
 
-
-async function saveChanges() {
-    console.log($activeGuildSettings)
-    $activeGuildSettings = await db.saveSettings($activeGuildSettings)
-    console.log("saving...")
-    console.log($activeGuildSettings)
+async function saveSettings() {
+    await DB.saveSettings(oldSettings)
+    settingsFetch = settingsFetcher()
 }
-
-const saveChangesDebounced = _.debounce(saveChanges, 700)
 </script>
 
 <Styles />
 
-{#await Promise.all([User.login(), Bot.getGuilds()]) then _}
-    {#if User.loggedIn}
-        <Container fluid>
-            <Row><h1>Hi, {User.discordUser.username}</h1></Row>
-            <Profile  />
+{#await userLoginPromise then _}
+    {#if user.loggedIn}
+        <Container>
+            <Row><h1>Hi, {user.discordUser.username}</h1></Row>
+            <!-- <Profile /> -->
             <Row>
                 <Col xs="3">
                     <ListGroup>
-                        {#each User.guilds as guild, i}
+                        {#each user.guilds as guild, i}
                             <ListGroupItem on:click={() => selectGuild(i)}>{guild.name}</ListGroupItem>
                         {/each}
                     </ListGroup>
                 </Col>
                 <Col>
-                    <h2>Settings</h2>
-                    <FormGroup floating label="Embed color">
-                        <Input
-                            bind:value={$activeGuildSettings.embedColor}
-                            on:keydown={async () => await saveChangesDebounced()}
-                        />
-                    </FormGroup>
+                    {#await settingsFetch then settings}
+                        {#if settings}
+                            <FormGroup floating label="Embed color">
+                                <Input
+                                    bind:value={oldSettings.embedColor}
+                                    on:keydown={async () => await saveSettings()}
+                                />
+                            </FormGroup>
+                        {/if}
+                    {/await}
                 </Col>
             </Row>
         </Container>
@@ -63,8 +67,47 @@ const saveChangesDebounced = _.debounce(saveChanges, 700)
             </a>
         </h1>
     {/if}
+{:catch}
+    <h1>An error occured during login</h1>
 {/await}
 
+<!-- {#await Promise.all([user.login(), Bot.getGuilds()]) then _} -->
+<!--     {#if user.loggedIn} -->
+<!--         <Container> -->
+<!--             <Row><h1>Hi, {user.discordUser.username}</h1></Row> -->
+<!--             <Profile /> -->
+<!--             <Row> -->
+<!--                 <Col xs="3"> -->
+<!--                     <ListGroup> -->
+<!--                         {#each user.guilds as guild, i} -->
+<!--                             <ListGroupItem on:click={() => selectGuild(i)}>{guild.name}</ListGroupItem> -->
+<!--                         {/each} -->
+<!--                     </ListGroup> -->
+<!--                 </Col> -->
+<!--                 <Col> -->
+<!--                     <h2>Settings</h2> -->
+<!--                     <FormGroup floating label="Embed color"> -->
+<!--                         {#if $activeHyperGuild} -->
+<!--                             <Input -->
+<!--                                 bind:value={$activeHyperGuild.settings.embedColor} -->
+<!--                                 on:keydown={async () => await saveChangesDebounced()} -->
+<!--                             /> -->
+<!--                         {/if} -->
+<!--                     </FormGroup> -->
+<!--                 </Col> -->
+<!--             </Row> -->
+<!--         </Container> -->
+<!--     {:else} -->
+<!--         <h1> -->
+<!--             <a -->
+<!--                 href="https://discord.com/api/oauth2/authorize?client_id=997526709148598282&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2F&response_type=code&scope=identify%20guilds" -->
+<!--             > -->
+<!--                 You are not logged in. Log in. -->
+<!--             </a> -->
+<!--         </h1> -->
+<!--     {/if} -->
+
+<!-- {/await} -->
 <style>
 h1 {
     text-align: center;
