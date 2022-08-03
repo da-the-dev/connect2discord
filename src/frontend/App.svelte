@@ -11,18 +11,29 @@ import type { Settings } from './modules/database'
 const user = new User()
 const userLoginPromise = user.login()
 
+// Settings fetching
 let oldSettings = {} as Settings
 const settingsFetcher = async () => {
+    console.log("about to start to fetch the guild 2...")
     oldSettings = await DB.getSettings($activeGuild.id)
     return oldSettings
 }
 let settingsFetch = DB.getSettings('')
 
-async function saveSettings() {
+// Form validation and saving settings + debouncing
+let formValid = true
+async function saveSettings(e: Event) {
+    let trueEmbedColor = (e.target as HTMLInputElement).value
+    formValid = trueEmbedColor != "" && trueEmbedColor.startsWith('#') && trueEmbedColor.length == 7
+    console.log(formValid)
+
+    if (!formValid) return
     await DB.saveSettings(oldSettings)
     settingsFetch = settingsFetcher()
 }
 const saveSettingsDebounced = _.debounce(saveSettings, 700)
+
+// Guild selection
 async function selectGuild(i: number) {
     $activeGuild = user.guilds[i]
     settingsFetch = settingsFetcher()
@@ -45,13 +56,16 @@ async function selectGuild(i: number) {
                         {/each}
                     </ListGroup>
                 </Col>
-                <Col>
+
+                <Col >
                     {#await settingsFetch then settings}
                         {#if settings}
                             <FormGroup floating label="Embed color">
                                 <Input
                                     bind:value={oldSettings.embedColor}
-                                    on:keypress={saveSettingsDebounced}
+                                    on:input={saveSettingsDebounced}
+                                    valid={formValid}
+                                    invalid={!formValid}
                                 />
                             </FormGroup>
                         {/if}
