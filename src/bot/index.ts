@@ -32,7 +32,6 @@ client.on('interactionCreate', async i => {
                 .setTitle("Ping!")
                 .setDescription("Pong!")
                 .setColor(settings.embedColor as ColorResolvable)
-                // .setColor("#cc00cc")
             i.reply({embeds: [embed]})
             break
     }

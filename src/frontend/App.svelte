@@ -1,7 +1,5 @@
 <script lang="ts">
 import { Col, Container, FormGroup, Input, ListGroup, ListGroupItem, Row, Styles } from 'sveltestrap'
-import Profile from './components/Profile.svelte'
-import Bot from './modules/bot'
 import User from './modules/user'
 import { activeGuild } from './stores/activeGuild'
 import _ from 'lodash'
@@ -22,8 +20,9 @@ let settingsFetch = DB.getSettings('')
 
 // Form validation and saving settings + debouncing
 let formValid = true
+let trueEmbedColor = ''
 async function saveSettings(e: Event) {
-    let trueEmbedColor = (e.target as HTMLInputElement).value
+    trueEmbedColor = (e.target as HTMLInputElement).value
     formValid = trueEmbedColor != "" && trueEmbedColor.startsWith('#') && trueEmbedColor.length == 7
     console.log(formValid)
 
@@ -64,6 +63,7 @@ async function selectGuild(i: number) {
                                 <Input
                                     bind:value={oldSettings.embedColor}
                                     on:input={saveSettingsDebounced}
+                                    style={`color: ${trueEmbedColor || "#000000"};`}
                                     valid={formValid}
                                     invalid={!formValid}
                                 />
