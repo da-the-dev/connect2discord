@@ -1,8 +1,13 @@
 // Require the necessary discord.js classes
-import { Client, Intents } from 'discord.js'
+import { Client, ColorResolvable, Intents, MessageEmbed } from 'discord.js'
 import * as dotenv from 'dotenv'
+import nano from 'nano'
 import { guildCreate } from './routes/guildCreate.js'
 dotenv.config()
+
+export interface Settings extends nano.DocumentGetResponse {
+    embedColor: string
+}
 
 // Create a new client instance
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] })
@@ -15,9 +20,20 @@ client.on('interactionCreate', async i => {
 
     const { commandName } = i
 
+    const couchdb = nano(`http://admin:${process.env.CDB_PASS}@localhost:5984`)
+    const db = couchdb.db.use('connect2discord')
+    const settings  = await db.get(i.guildId!) as Settings
+    console.log(settings.embedColor)
+
+
     switch (commandName) {
         case 'ping':
-            i.reply('Pong!')
+            const embed = new MessageEmbed()
+                .setTitle("Ping!")
+                .setDescription("Pong!")
+                .setColor(settings.embedColor as ColorResolvable)
+                // .setColor("#cc00cc")
+            i.reply({embeds: [embed]})
             break
     }
 })

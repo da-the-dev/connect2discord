@@ -95,5 +95,9 @@
   },
   "include": [
     "src/bot/**/*",
+  ],
+  "exclude": [
+    "src/frontend/**/*",
+    "src/server/**/*",
   ]
 }
