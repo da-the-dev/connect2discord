@@ -23,9 +23,12 @@ These values are set in a `.env` file at the root of the project, which you'll h
 CLIENT_ID=abunchofnumbers
 CLIENT_SECRET=bigstring
 TOKEN=AvEryBigstRing
+CDB_PASS=your_couchdb_password
 ```
 
-Once that's done, do this:
+Once that done, you'll need to install [CouchDB](https://couchdb.apache.org/#download) binary and set it up. Create a new database with the name `connect2discord` and in this database's "Permissons" tab and remove the "\_admin" role under "Members". Add the password you've setup in `.env` under `CDB_PASS`.
+
+After that:
 1. Run `npm i` to install all dependencies
 2. Run `npm start` to start the project`
 3. Go to `localhost:8000/` to view the project
@@ -33,7 +36,7 @@ Once that's done, do this:
 To stop, press `Ctrl+C` in the terminal.
 
 ### Why do `/docs` suck so much?
-Those `.md`'s with crazy maniacs' rambles are not as much as documentation, but more so the real life [Rubber duck debugging](https://en.wikipedia.org/wiki/Rubber_duck_debugging). I use these files to describe the problem I'm having at the moment, which helps me to come up with a solution. I write things down, so I don't forget anything. Plus, I want to practice touch typing. 
+Those `.md`'s with crazy maniacs' rambles are not as much as documentation, but more so the real life [Rubber duck debugging](https://en.wikipedia.org/wiki/Rubber_duck_debugging). I use these files to describe the problem I'm having at the moment, which helps me to come up with a solution. I write things down, so I don't forget anything. Plus, I want to practice touch typing.
 
 #### TODO:
 - [ ] Add info about login link in the README.md
