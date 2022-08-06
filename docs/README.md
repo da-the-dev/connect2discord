@@ -36,7 +36,7 @@ After that:
 To stop, press `Ctrl+C` in the terminal.
 
 ### Why do `/docs` suck so much?
-Those `.md`'s with crazy maniacs' rambles are not as much as documentation, but more so the real life [Rubber duck debugging](https://en.wikipedia.org/wiki/Rubber_duck_debugging). I use these files to describe the problem I'm having at the moment, which helps me to come up with a solution. I write things down, so I don't forget anything. Plus, I want to practice touch typing.
+Those `.md`'s with crazy maniac's rambles are not as much as documentation, but more so the real life [Rubber duck debugging](https://en.wikipedia.org/wiki/Rubber_duck_debugging). I use these files to describe the problem I'm having at the moment, which helps me to come up with a solution. I write things down, so I don't forget anything. Plus, I want to practice touch typing. Don't rely on those files too much lol.
 
 #### TODO:
 - [ ] Add info about login link in the README.md
