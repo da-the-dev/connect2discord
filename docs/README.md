@@ -26,7 +26,7 @@ TOKEN=AvEryBigstRing
 CDB_PASS=your_couchdb_password
 ```
 
-Once that done, you'll need to install [CouchDB](https://couchdb.apache.org/#download) binary and set it up. Create a new database with the name `connect2discord` and in this database's "Permissons" tab and remove the "\_admin" role under "Members". Add the password you've setup in `.env` under `CDB_PASS`.
+Once that done, you'll need to install [CouchDB](https://couchdb.apache.org/#download) binary and set it up. Create a new database with the name `connect2discord` and in this database's "Permissions" tab and remove the "\_admin" role under "Members". Add the password you've setup in `.env` under `CDB_PASS`.
 
 After that:
 1. Run `npm i` to install all dependencies
@@ -45,3 +45,4 @@ Those `.md`'s with crazy maniacs' rambles are not as much as documentation, but 
 		*It just isn't built to support usage in browsers.*
 - [x] Figure out how to omit fields in Rust's structs
         *You cannot.*
+- [ ] Rewrite frontend async UI. Again
